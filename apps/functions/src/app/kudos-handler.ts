@@ -20,7 +20,7 @@ export const kudosHandlerFactory = (
         }
 
         const slashCommand: SlashCommandRequest = request.body;
-        const mentions = slashCommand.text.match(/@[\w]+/);
+        const mentions = slashCommand.text.match(/@[^\s]+/);
         if (mentions && mentions.length === 1) {
             const mention = mentions[0].substr(1);
             const feedback = slashCommand.text.substr(mention.length + 2);
