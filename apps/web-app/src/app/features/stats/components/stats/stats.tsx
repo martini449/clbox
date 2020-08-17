@@ -5,6 +5,11 @@ import {AppState} from '../../../../state/app-state';
 
 const currentMonth = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0, 7);
 
+const Header = styled.div`
+  font-weight: 500;
+  margin-bottom: 8px;
+`;
+
 const StatRow = styled.div`
   display: flex;
 `;
@@ -15,11 +20,11 @@ const StatKey = styled.div`
 
 const StatsView = ({stats}: ViewProps) => {
   return <div>
+    <Header>
+      {stats?.summary ?? 0} feedbacks in {currentMonth}.
+    </Header>
     <div>
-      Stats for: {currentMonth}
-    </div>
-    <div>
-      {Object.keys(stats || {})?.map(date => <StatRow key={date}>
+      {Object.keys(stats || {})?.filter(date => date !== 'summary').sort((a, b) => b.localeCompare(a)).map(date => <StatRow key={date}>
         <StatKey>{date}</StatKey>
         <div>{stats[date]}</div>
       </StatRow>)}
