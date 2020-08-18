@@ -10,14 +10,14 @@ import {browserHistory} from './app/platform/browser-history';
 import {store} from './app/store/store';
 
 ReactDOM.render(
-    <CssBaseline>
-        <FirebaseContext.Provider value={firebaseApp}>
-            <Provider store={store}>
-                <ConnectedRouter history={browserHistory}>
-                    <AppWrapper/>
-                </ConnectedRouter>
-            </Provider>
-        </FirebaseContext.Provider>
-    </CssBaseline>,
-    document.getElementById('clbox')
+  <CssBaseline>
+    <FirebaseContext.Provider value={firebaseApp}>
+      <Provider store={store}>
+        <ConnectedRouter history={browserHistory}>
+          <AppWrapper/>
+        </ConnectedRouter>
+      </Provider>
+    </FirebaseContext.Provider>
+  </CssBaseline>,
+  document.getElementById('clbox')
 );
