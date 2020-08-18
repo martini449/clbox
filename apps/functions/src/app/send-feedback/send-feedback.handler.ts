@@ -20,7 +20,7 @@ async function sendSlackMessage(slackHttpHeaders: { Authorization: string; 'Cont
   });
 }
 
-function inboxMessage(forUser: SlackUserProfile, fromUser: SlackUserProfile, payload: PendingKudosMessage) {
+function message(forUser: SlackUserProfile, fromUser: SlackUserProfile, payload: PendingKudosMessage) {
   return {
     date: now(),
     for: forUser.email,
@@ -70,9 +70,9 @@ export const sendFeedbackFactory = (
     );
 
   return functions.pubsub.topic('pending-slack-notifications').onPublish(
-    async (message, context) => {
+    async (topicMessage, context) => {
       const usersIndex = await usersIndexPromise;
-      const payload: PendingKudosMessage = JSON.parse(Buffer.from(message.data, 'base64').toString());
+      const payload: PendingKudosMessage = JSON.parse(Buffer.from(topicMessage.data, 'base64').toString());
 
       const fromUser: SlackUserProfile = usersIndex[payload.user]?.profile;
       const forUser: SlackUserProfile = usersIndex[payload.mention]?.profile;
@@ -86,11 +86,17 @@ export const sendFeedbackFactory = (
         );
       }
 
-      const userCollection = firebase.firestore().collection(`team/${payload.team}/user/`);
+      const firestore = firebase.firestore();
+      const userCollection = firestore.collection(`team/${payload.team}/user/`);
       const chapterLeader = (await userCollection.doc(forUser.email).get())?.data()?.chapterLeader;
+
       if (chapterLeader !== undefined) {
-        const inboxCollection = firebase.firestore().collection(`team/${payload.team}/inbox/${chapterLeader}/message`);
-        await inboxCollection.add(inboxMessage(forUser, fromUser, payload));
+        await firestore.runTransaction(async trn => {
+          const inboxDoc = firestore.collection(`team/${payload.team}/inbox/${chapterLeader}/message`).doc();
+          const sentDoc = firestore.collection(`team/${payload.team}/sent/${chapterLeader}/message`).doc(inboxDoc.id);
+          trn.set(inboxDoc, message(forUser, fromUser, payload));
+          trn.set(sentDoc, message(forUser, fromUser, payload));
+        });
       } else {
         await failedToSendFeedback(
           firebase,
