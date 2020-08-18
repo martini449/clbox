@@ -4,6 +4,7 @@ import {Redirect, Route, Switch} from 'react-router';
 import {AppState} from '../../../../state/app-state';
 import {LoginWait} from '../login-wait/login-wait';
 import {Login} from '../login/login';
+import {CreateUser} from '../create-user/create-user';
 import {ResetPassword} from '../restore-password/reset-password';
 
 export const UnauthenticatedAppView = ({authenticated}: ViewProps) => <div>
@@ -12,6 +13,7 @@ export const UnauthenticatedAppView = ({authenticated}: ViewProps) => <div>
     {authenticated === false && <Switch>
         <Route path='/login' component={Login}/>
         <Route path='/reset' component={ResetPassword}/>
+        <Route path='/register' component={CreateUser}/>
         <Redirect to='/login'/>
     </Switch>}
 </div>;

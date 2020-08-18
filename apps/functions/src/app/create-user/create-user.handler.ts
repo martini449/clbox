@@ -1,8 +1,8 @@
-import {RegisterUserRequest} from './register-user.request';
+import {CreateUserRequest} from './create-user.request';
 
 const emailRegex = /^[a-zA-Z0-9._-]+@(?<domain>[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4})$/i;
 
-export const registerUserFactory = (
+export const createUserFactory = (
   functions: import('firebase-functions').FunctionBuilder,
   firebase: typeof import('firebase-admin')
 ) => {
@@ -14,14 +14,13 @@ export const registerUserFactory = (
     }
   }
 
-  return functions.https.onRequest(async (request, response) => {
-    console.info(`Request for user registration (${JSON.stringify(request.body)})`);
+  async function handler(data) {
+  }
 
-    if (request.method !== 'POST') {
-      return response.status(405).send('Invalid request method (only POST allowed)');
-    }
+  return functions.https.onCall(async (data, context) => {
+    console.info(`Request for user registration (${JSON.stringify(data)})`);
 
-    const registerRequest = request.body as RegisterUserRequest;
+    const registerRequest = data as CreateUserRequest;
     const emailMatch = registerRequest?.email?.match(emailRegex);
     const emailDomain = emailMatch[1];
 
@@ -33,10 +32,10 @@ export const registerUserFactory = (
     ).get();
 
     if (invitation.empty) {
-      console.info(`Invitation not found for domain: ${emailDomain}`);
-      return response.contentType('json')
-        .status(400)
-        .send({status: 'bad'});
+      console.warn(`Invitation not found for domain: ${emailDomain}`);
+      return {
+        status: 'bad'
+      };
     } else {
       const existingUser = await tryToFindUserByEmail(registerRequest.email);
       if (!existingUser) {
@@ -45,12 +44,17 @@ export const registerUserFactory = (
           email: registerRequest.email,
           emailVerified: false
         });
+        await firebase.firestore().collection('user').doc(registerRequest.email).set({
+          teams: {
+            [invitation.docs[0].id]: true
+          }
+        })
       } else {
         console.info(`User already exists (${registerRequest.email})`);
       }
-      return response.contentType('json')
-        .status(200)
-        .send({status: 'ok'})
+      return {
+        status: 'ok'
+      };
     }
   });
 };
