@@ -93,7 +93,7 @@ export const sendFeedbackFactory = (
       if (chapterLeader !== undefined) {
         await firestore.runTransaction(async trn => {
           const inboxDoc = firestore.collection(`team/${payload.team}/inbox/${chapterLeader}/message`).doc();
-          const sentDoc = firestore.collection(`team/${payload.team}/sent/${chapterLeader}/message`).doc(inboxDoc.id);
+          const sentDoc = firestore.collection(`team/${payload.team}/sent/${fromUser.email}/message`).doc(inboxDoc.id);
           trn.set(inboxDoc, message(forUser, fromUser, payload));
           trn.set(sentDoc, message(forUser, fromUser, payload));
         });
