@@ -21,7 +21,7 @@ const StatKey = styled.div`
 const StatsView = ({stats}: ViewProps) => {
   return <div>
     <Header>
-      {stats?.summary ?? 0} feedbacks in {currentMonth}.
+      Company {stats?.summary ?? 0} feedbacks in {currentMonth}.
     </Header>
     <div>
       {Object.keys(stats || {})?.filter(date => date !== 'summary').sort((a, b) => b.localeCompare(a)).map(date => <StatRow key={date}>
