@@ -67,17 +67,13 @@
               "apps/web-app/tsconfig.app.json",
               "apps/web-app/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/web-app/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/web-app/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/web-app/jest.config.js",
-            "tsConfig": "apps/web-app/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -105,13 +101,8 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": [
-              "apps/web-app-e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/web-app-e2e/**/*"
-            ]
+            "tsConfig": ["apps/web-app-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/web-app-e2e/**/*"]
           }
         }
       }
@@ -130,9 +121,7 @@
             "outputPath": "dist/apps/functions",
             "main": "apps/functions/src/main.ts",
             "tsConfig": "apps/functions/tsconfig.app.json",
-            "assets": [
-              "apps/functions/src/assets"
-            ]
+            "assets": ["apps/functions/src/assets"]
           },
           "configurations": {
             "production": {
@@ -162,17 +151,13 @@
               "apps/functions/tsconfig.app.json",
               "apps/functions/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/functions/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/functions/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/functions/jest.config.js",
-            "tsConfig": "apps/functions/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
