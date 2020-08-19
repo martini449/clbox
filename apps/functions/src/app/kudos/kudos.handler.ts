@@ -8,7 +8,7 @@ export const kudosHandlerFactory = (
     pubsub: import('@google-cloud/pubsub').PubSub) =>
     functions.https.onRequest(async (request, response) => {
         if (request.method !== 'POST') {
-            return response.status(405).send('Invalid request method (only POST allowed)');
+            response.status(405).send('Invalid request method (only POST allowed)');
         }
         if (!checkSlackSignature(
             config.slack.signingsecret,
@@ -16,7 +16,7 @@ export const kudosHandlerFactory = (
             request.headers['x-slack-request-timestamp'],
             request.rawBody.toString()
         )) {
-            return response.status(401).send('Invalid slack signing');
+            response.status(401).send('Invalid slack signing');
         }
 
         const slashCommand: SlashCommandRequest = request.body;
@@ -29,14 +29,14 @@ export const kudosHandlerFactory = (
                 mention, feedback, user: slashCommand.user_name, team: slashCommand.team_domain
             })));
 
-            return response.contentType('json')
+            response.contentType('json')
                 .status(200)
                 .send({
                     'response_type': 'ephemeral',
                     'text': `Thank you for your feedback!`
                 });
         } else {
-            return response.contentType('json')
+            response.contentType('json')
                 .status(200)
                 .send({
                     'response_type': 'ephemeral',
