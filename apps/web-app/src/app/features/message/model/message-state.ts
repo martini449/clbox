@@ -1,4 +1,4 @@
-export enum InboxMessageState {
+export enum MessageState {
     Pending = 'Pending',
     Discarded = 'Discarded'
 }

@@ -9,18 +9,18 @@ const StyledCard = styled(Card)`
 `;
 
 export const FeedbackCard = ({feedback, onDiscard}: ViewProps) => <StyledCard>
-    <CardHeader title={feedback.forName} subheader={`by ${feedback.fromName} on ${feedback.date}`}/>
-    <CardContent>
-        <Typography variant="body2">{feedback.message}</Typography>
-    </CardContent>
-    <CardActions>
-        <Button size="small" color="secondary" onClick={onDiscard}>
-            Discard
-        </Button>
-    </CardActions>
+  <CardHeader title={feedback.forName} subheader={`by ${feedback.fromName} on ${feedback.date}`}/>
+  <CardContent>
+    <Typography variant="body2">{feedback.message}</Typography>
+  </CardContent>
+  {onDiscard && <CardActions>
+    <Button size="small" color="secondary" onClick={onDiscard}>
+      Discard
+    </Button>
+  </CardActions>}
 </StyledCard>;
 
 interface ViewProps {
-    feedback: Feedback;
-    onDiscard: () => void
+  feedback: Feedback;
+  onDiscard?: () => void
 }

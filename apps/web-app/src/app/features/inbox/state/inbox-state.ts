@@ -1,7 +1,7 @@
-import {InboxMessage} from './model/inbox-message';
+import {Message} from '../../message/model/message';
 
 export interface InboxState {
     messages: {
-        byId: { [key: string]: InboxMessage }
+        byId: { [key: string]: Message }
     };
 }

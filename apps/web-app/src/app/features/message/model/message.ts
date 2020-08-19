@@ -1,6 +1,6 @@
-import {InboxMessageState} from './inbox-message-state';
+import {MessageState} from './message-state';
 
-export interface InboxMessage {
+export interface Message {
     id: string;
     from: string;
     fromName: string;
@@ -8,5 +8,5 @@ export interface InboxMessage {
     forName: string;
     date: string;
     message: string;
-    state: InboxMessageState;
+    state: MessageState;
 }

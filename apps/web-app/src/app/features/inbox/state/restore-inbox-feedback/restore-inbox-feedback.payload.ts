@@ -1,5 +1,5 @@
-import {InboxMessage} from '../model/inbox-message';
+import {Message} from '../../../message/model/message';
 
 export interface RestoreInboxFeedbackPayload {
-    message: InboxMessage;
+    message: Message;
 }
