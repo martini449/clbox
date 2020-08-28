@@ -1,4 +1,4 @@
-## Perquisitions
+## Prerequisites
 
 1. Setup firebase account
 2. Install firebase cli and login
