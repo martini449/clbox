@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "clbox-491b3"
+    "default": "clbox-491b3",
+    "dev": "clbox-dev"
   }
 }
