@@ -1,3 +1,10 @@
+# Common dev environment
+
+1. Request persmissions to firebase project
+2. Setup firebase cli and login
+3. Create .local.env based on .env and firebase webapp configuration (web app config -> sdk snippet -> konfiguracja)
+(opt) 4. Deploy local changes to dev via `firebase deploy`
+
 # New/custom test environment
 
 ## Perquisitions
