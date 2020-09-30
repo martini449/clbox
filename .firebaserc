@@ -1,7 +1,6 @@
 {
   "projects": {
     "default": "clbox-491b3",
-    "dev": "clbox-dev",
-    "mlody-news-dev": "mlody-news-deev"
+    "dev": "clbox-dev"
   }
 }
