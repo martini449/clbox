@@ -1,30 +1,24 @@
 export const feedbackStatsFactory = (
   functions: import('firebase-functions').FunctionBuilder,
   firebase: typeof import('firebase-admin')
-) => functions.firestore.document('team/{team}/sent/{user}/message/{messageId}').onCreate(
+) => functions.firestore.document('team/{team}/inbox/{chapterLeader}/message/{messageId}').onCreate(
   async (change, context) => {
     const firestore = firebase.firestore();
 
     const {date} = change.data() as { date: string };
+    const month = date.substring(0, 7);
     const day = date.substring(0, 10);
-    const year = date.substring(0, 4);
-    const userRef = firestore.collection(`user`).doc(context.params.user);
+    const monthRef = firestore.collection(`team/${context.params.team}/stats`).doc(month);
 
     await firestore.runTransaction(async trn => {
-      const monthDoc = await trn.get(userRef);
+      const monthDoc = await trn.get(monthRef);
       const statsData = monthDoc.data();
-      await trn.set(userRef,
-        {
-          byYear: {
-            [year]: {
-              [day]: (statsData?.byYear?.[year]?.[day] ?? 0) + 1,
-              summary: (statsData?.byYear?.[year]?.summary ?? 0) + 1
-            }
-          }
-        },
-        {
-          merge: true
-        })
+      await trn.set(monthRef, {
+        [day]: (statsData?.[day] ?? 0) + 1,
+        summary: (statsData?.summary ?? 0) + 1
+      }, {
+        merge: true
+      })
     });
   }
 )
