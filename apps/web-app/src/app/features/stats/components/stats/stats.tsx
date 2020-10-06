@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import styled from 'styled-components';
+import {TextField} from '@material-ui/core';
 import {AppState} from '../../../../state/app-state';
 
 const currentMonth = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0, 7);
@@ -19,15 +20,22 @@ const StatKey = styled.div`
 `;
 
 const StatsView = ({stats}: ViewProps) => {
+  const [state, setState] = useState({
+    username: '',
+});
+  const handleChange = event => {
+    setState({
+      ...state,
+      username: event.target.value
+  });
+    };
   return <div>
+    <TextField id="stats-username" label="Username" onChange={handleChange}/>
     <Header>
-      {stats?.summary ?? 0} company wide feedbacks in {currentMonth}.
+      {JSON.stringify(stats)}...
+      {state.username}
     </Header>
     <div>
-      {Object.keys(stats || {})?.filter(date => date !== 'summary').sort((a, b) => b.localeCompare(a)).map(date => <StatRow key={date}>
-        <StatKey>{date}</StatKey>
-        <div>{stats[date]}</div>
-      </StatRow>)}
     </div>
   </div>;
 };

@@ -3,7 +3,7 @@ import {Stats} from '../stats';
 
 export interface StatsFetchedPayload {
   month: string;
-  stats: Stats;
+  stats: any;
 }
 
 export const statsFetched = createAction<StatsFetchedPayload>('StatsFetched');
