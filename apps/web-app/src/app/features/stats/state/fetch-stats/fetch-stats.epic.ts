@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import {Epic} from 'redux-observable';
 import {combineLatest, Observable, of} from 'rxjs';
-import {distinct, map, switchMap, tap} from 'rxjs/operators';
+import {distinct, map, switchMap} from 'rxjs/operators';
 import {AppState} from '../../../../state/app-state';
 import {loggedIn} from '../../../authentication/state/login/logged-in.action';
 import {firebaseApp} from '../../../firebase/firebase.app';
@@ -24,8 +24,6 @@ export const fetchStatsEpic: Epic<ReturnType<typeof loggedIn>, any, AppState> = 
       if (user && team) {
         return new Observable<firebase.firestore.DocumentSnapshot>(subscriber => {
           const userStats = firestore.collection(`team/${team}/user`);
-          const monthStats = firestore.collection(`team/${team}/stats`).doc(currentMonth);
-          // monthStats.onSnapshot(subscriber)
           userStats.onSnapshot(subscriber)
         });
       } else {
