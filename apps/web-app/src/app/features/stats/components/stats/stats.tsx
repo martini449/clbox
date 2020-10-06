@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {connect, ConnectedProps} from 'react-redux';
 import styled from 'styled-components';
-import {TextField} from '@material-ui/core';
 import {AppState} from '../../../../state/app-state';
 
 const currentMonth = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0, 7);
@@ -12,35 +11,50 @@ const Header = styled.div`
 `;
 
 const StatRow = styled.div`
+  flex-direction: column;
   display: flex;
 `;
 
-const StatKey = styled.div`
-  flex-basis: 100px;
+const StatSpacer = styled.div`
+  height: 15px;
 `;
 
-const StatsView = ({stats}: ViewProps) => {
-  const [state, setState] = useState({
-    username: '',
-});
-  const handleChange = event => {
-    setState({
-      ...state,
-      username: event.target.value
-  });
-    };
-  return <div>
-    <TextField id="stats-username" label="Username" onChange={handleChange}/>
+const StatKey = styled.div`
+  flex-basis: 10px;
+`;
+
+const StatsView = ({stats}: ViewProps) =>
+  <div>
     <Header>
-      {JSON.stringify(stats)}...
-      {state.username}
+      Summary for users:
     </Header>
     <div>
+      {(stats)?.map(stat => <StatRow key={stat.name}>
+        <StatKey>{stat.name}:</StatKey>
+        <StatSpacer></StatSpacer>
+        <StatRow>
+          {Object.keys(stat.stats || {}).map(year =>
+            <StatKey key={year}>
+              <b>{year}</b>
+              <StatRow>
+                <StatKey>
+                  {Object.keys(stat.stats[year]).filter(value => value !== 'summary').map(value => <div
+                    key={value}>{value}: {stat.stats[year][value]}</div>)}
+                </StatKey>
+                <StatKey>
+                  Totally: {stat.stats[year]['summary']}
+                </StatKey>
+              </StatRow>
+              <StatSpacer></StatSpacer>
+            </StatKey>
+          )}
+        </StatRow>
+      </StatRow>)}
     </div>
   </div>;
-};
 
-interface ViewProps extends ConnectedProps<typeof connector> {
+interface ViewProps extends ConnectedProps
+  <typeof connector> {
 }
 
 const connector = connect(

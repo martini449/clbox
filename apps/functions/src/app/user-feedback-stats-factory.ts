@@ -8,14 +8,14 @@ export const userFeedbackStatsFactory = (
     const {date} = change.data() as { date: string };
     const day = date.substring(0, 10);
     const year = date.substring(0, 4);
-    const userRef = firestore.collection(`user`).doc(context.params.user);
+    const userRef = firestore.collection(`team/${context.params.team}/user`).doc(context.params.user);
 
     await firestore.runTransaction(async trn => {
       const monthDoc = await trn.get(userRef);
       const statsData = monthDoc.data();
       await trn.set(userRef,
         {
-          byYear: {
+          stats: {
             [year]: {
               [day]: (statsData?.byYear?.[year]?.[day] ?? 0) + 1,
               summary: (statsData?.byYear?.[year]?.summary ?? 0) + 1
