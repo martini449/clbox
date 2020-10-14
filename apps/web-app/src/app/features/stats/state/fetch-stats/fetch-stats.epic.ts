@@ -23,8 +23,8 @@ export const fetchStatsEpic: Epic<ReturnType<typeof loggedIn>, any, AppState> = 
     switchMap(([user, team]) => {
       if (user && team) {
         return new Observable<firebase.firestore.DocumentSnapshot>(subscriber => {
-          const userStats = firestore.collection(`team/${team}/user`);
-          userStats.onSnapshot(subscriber)
+          const monthStats = firestore.collection(`team/${team}/stats`).doc(currentMonth);
+          monthStats.onSnapshot(subscriber)
         });
       } else {
         return of<firebase.firestore.DocumentSnapshot>();
@@ -32,11 +32,6 @@ export const fetchStatsEpic: Epic<ReturnType<typeof loggedIn>, any, AppState> = 
     }),
     map(stats => statsFetched({
       month: currentMonth,
-      stats: stats.docs.map((doc) => {
-        return {
-          name: doc.id,
-          stats: doc.data().stats
-        }
-      }) as Stats
+      stats: stats.data() as Stats
     }))
   );
