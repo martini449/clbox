@@ -2,8 +2,8 @@ import {createAction} from '@reduxjs/toolkit';
 import {Stats} from '../stats';
 
 export interface StatsFetchedPayload {
-  name: string;
+  month: string;
   stats: Stats;
 }
 
-export const statsFetched = createAction<StatsFetchedPayload[]>('StatsFetched');
+export const statsFetched = createAction<StatsFetchedPayload>('StatsFetched');
