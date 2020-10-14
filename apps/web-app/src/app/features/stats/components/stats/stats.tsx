@@ -11,47 +11,26 @@ const Header = styled.div`
 `;
 
 const StatRow = styled.div`
-  flex-direction: column;
   display: flex;
 `;
 
-const StatSpacer = styled.div`
-  height: 15px;
-`;
-
 const StatKey = styled.div`
-  flex-basis: 10px;
+  flex-basis: 100px;
 `;
 
-const StatsView = ({stats}: ViewProps) =>
-  <div>
+const StatsView = ({stats}: ViewProps) => {
+  return <div>
     <Header>
-      Summary for users:
+      {stats?.summary ?? 0} company wide feedbacks in {currentMonth}.
     </Header>
     <div>
-      {(stats)?.map(stat => <StatRow key={stat.name}>
-        <StatKey>{stat.name}:</StatKey>
-        <StatSpacer></StatSpacer>
-        <StatRow>
-          {Object.keys(stat.stats || {}).map(year =>
-            <StatKey key={year}>
-              <b>{year}</b>
-              <StatRow>
-                <StatKey>
-                  {Object.keys(stat.stats[year]).filter(value => value !== 'summary').map(value => <div
-                    key={value}>{value}: {stat.stats[year][value]}</div>)}
-                </StatKey>
-                <StatKey>
-                  Totally: {stat.stats[year]['summary']}
-                </StatKey>
-              </StatRow>
-              <StatSpacer></StatSpacer>
-            </StatKey>
-          )}
-        </StatRow>
+      {Object.keys(stats || {})?.filter(date => date !== 'summary').sort((a, b) => b.localeCompare(a)).map(date => <StatRow key={date}>
+        <StatKey>{date}</StatKey>
+        <div>{stats[date]}</div>
       </StatRow>)}
     </div>
   </div>;
+};
 
 interface ViewProps extends ConnectedProps
   <typeof connector> {
